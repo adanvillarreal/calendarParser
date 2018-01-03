@@ -47,6 +47,16 @@ class TableSpider(InitSpider):
         print(response.body)
         print("RERERERERER")
         count = 0
-        tables = response.xpath('//*[@id="detalles"]/table/text()');
-        for table in tables:
-            print(table)
+        materias = response.xpath('//*[@id="detalles"]/table/tbody/tr/td/font/text()')
+        tables = response.xpath('//*[@class="texto4"]/text()').extract()
+        for i in range (4, len(tables)):
+            materia = response.xpath('//*[@id="detalles"]/table[%d]/tbody/tr/td/font/text()' % i)
+            dias = response.xpath('//*[@id="detalles"]/table[%d]/tbody/tr[2]/td[2]/font/text()' % i+2)
+            inicio = response.xpath('//*[@id="detalles"]/table[%d]/tbody/tr[3]/td/font/text()' % i+2)[:4]
+            final = response.xpath('//*[@id="detalles"]/table[%d]/tbody/tr[3]/td/font/text()' % i+2)[-4:]
+            edificio = response.xpath('//*[@id="detalles"]/table[%d]/tbody/tr[2]/td[4]/font/text()' % i+2)
+            salon = response.xpath('//*[@id="detalles"]/table[%d]/tbody/tr[2]/td[5]/font/text()' % i+2)
+        #int count = 0
+        #for table in tables:
+        #    if count == 3:
+        #        materia = table.xpath('/text()')
