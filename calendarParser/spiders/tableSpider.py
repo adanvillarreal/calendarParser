@@ -48,14 +48,30 @@ class TableSpider(InitSpider):
         print("RERERERERER")
         count = 0
         materias = response.xpath('//*[@id="detalles"]/table/tbody/tr/td/font/text()')
-        tables = response.xpath('//*[@class="texto4"]/text()').extract()
-        for i in range (4, len(tables)):
-            materia = response.xpath('//*[@id="detalles"]/table[%d]/tbody/tr/td/font/text()' % i)
-            dias = response.xpath('//*[@id="detalles"]/table[%d]/tbody/tr[2]/td[2]/font/text()' % i+2)
-            inicio = response.xpath('//*[@id="detalles"]/table[%d]/tbody/tr[3]/td/font/text()' % i+2)[:4]
-            final = response.xpath('//*[@id="detalles"]/table[%d]/tbody/tr[3]/td/font/text()' % i+2)[-4:]
-            edificio = response.xpath('//*[@id="detalles"]/table[%d]/tbody/tr[2]/td[4]/font/text()' % i+2)
-            salon = response.xpath('//*[@id="detalles"]/table[%d]/tbody/tr[2]/td[5]/font/text()' % i+2)
+        tablesOld = response.xpath('//*[@class="texto4"]/text()').extract()
+        tables = response.xpath('//*[@id="detalles"]/table')
+        i = 4
+        while i <= len(tables):
+            materia = response.xpath('//*[@id="detalles"]/table[%d]/tr/td/font/text()' % i).extract()[0]
+            print (materia)
+            print("TABLA")
+            print(i+2)
+            horarios = response.xpath('//*[@id="detalles"]/table[%d]/tr' % (i+2))
+            j = 2
+            while j <= len(horarios):
+                dias = response.xpath('//*[@id="detalles"]/table[%d]/tr[%d]/td[2]/font/text()' % ((i+2), j)).extract()
+                print (dias)
+                inicio = response.xpath('//*[@id="detalles"]/table[%d]/tr[%d]/td[3]/font/text()' % ((i+2), j)).extract()[0][:5]
+                print(inicio)
+                final = response.xpath('//*[@id="detalles"]/table[%d]/tr[%d]/td[3]/font/text()' % ((i+2), j)).extract()[0][-10:-5]
+                print(final)
+                edificio = response.xpath('//*[@id="detalles"]/table[%d]/tr[%d]/td[4]/font/text()' % ((i+2), j)).extract()[0]
+                print(edificio)
+                salon = response.xpath('//*[@id="detalles"]/table[%d]/tr[%d]/td[5]/font/text()' % ((i+2), j)).extract()[0]
+                print(salon)
+                j += 1
+            #print(materia + dias + inicio + final + edificio + salon)
+            i = i+3
         #int count = 0
         #for table in tables:
         #    if count == 3:
