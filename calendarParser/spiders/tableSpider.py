@@ -1,12 +1,18 @@
+import datetime
+from datetime import timedelta
 import scrapy
 from scrapy.spiders.init import InitSpider
 from scrapy.utils.response import open_in_browser
 from scrapy.http.cookies import CookieJar
 from scrapy.utils.response import open_in_browser
+from calendarParser.items import EventItem
+from calendarParser.items import DayItem
 
-
+semester_end_date = '20180518T235959Z'
 class TableSpider(InitSpider):
-    name = "homepage"
+    name = 'homepage'
+    days = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA']
+
     #handle_httpstatus_list = [301, 302]
     start_urls =['http://alsvdbw01.itesm.mx/servesc/plsql/swghorario_itesm.cargado#']
     login_page = 'https://mail.itesm.mx/'
@@ -52,23 +58,45 @@ class TableSpider(InitSpider):
         tables = response.xpath('//*[@id="detalles"]/table')
         i = 4
         while i <= len(tables):
+            event = EventItem()
             materia = response.xpath('//*[@id="detalles"]/table[%d]/tr/td/font/text()' % i).extract()[0]
             print (materia)
+            event['summary'] = materia
             print("TABLA")
             print(i+2)
             horarios = response.xpath('//*[@id="detalles"]/table[%d]/tr' % (i+2))
             j = 2
             while j <= len(horarios):
                 dias = response.xpath('//*[@id="detalles"]/table[%d]/tr[%d]/td[2]/font/text()' % ((i+2), j)).extract()
-                print (dias)
+                #print (dias)
                 inicio = response.xpath('//*[@id="detalles"]/table[%d]/tr[%d]/td[3]/font/text()' % ((i+2), j)).extract()[0][:5]
-                print(inicio)
+                #print(inicio)
                 final = response.xpath('//*[@id="detalles"]/table[%d]/tr[%d]/td[3]/font/text()' % ((i+2), j)).extract()[0][-10:-5]
-                print(final)
+                #print(final)
                 edificio = response.xpath('//*[@id="detalles"]/table[%d]/tr[%d]/td[4]/font/text()' % ((i+2), j)).extract()[0]
-                print(edificio)
+                #print(edificio)
                 salon = response.xpath('//*[@id="detalles"]/table[%d]/tr[%d]/td[5]/font/text()' % ((i+2), j)).extract()[0]
-                print(salon)
+                #print(salon)
+                event['location'] = '%s %s' % (edificio, salon)
+
+
+                semester_start_date = datetime.date(2018, 1, 7)
+
+                for numDay in range(0, 6):
+                    dayTime = DayItem()
+                    if dias[numDay] != '-':
+                        dayTime['dateTime'] = '%sT%s:00.000-06:00' % (semester_start_date, inicio)
+                        dayTime['timeZone'] = 'America/Monterrey'
+                        event['start'] = dayTime
+                        dayTime = DayItem()
+                        dayTime['dateTime'] = '%sT%s:00.000-06:00' % (semester_start_date, final)
+                        event['end'] = dayTime
+                        dayTime['timeZone'] = 'America/Monterrey'
+                        recurrence = ['RRULE:FREQ=WEEKLY;UNTIL=%s' % (semester_end_date),]
+                        event['recurrence'] = recurrence
+                        yield event
+                    semester_start_date = semester_start_date + timedelta(days=1)
+
                 j += 1
             #print(materia + dias + inicio + final + edificio + salon)
             i = i+3

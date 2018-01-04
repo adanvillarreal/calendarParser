@@ -8,7 +8,15 @@
 import scrapy
 
 
-class CalendarparserItem(scrapy.Item):
+class EventItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
-    pass
+    summary = scrapy.Field()
+    location = scrapy.Field()
+    start = scrapy.Field()
+    end = scrapy.Field()
+    recurrence = scrapy.Field()
+
+class DayItem(scrapy.Item):
+    dateTime = scrapy.Field()
+    timeZone = scrapy.Field()

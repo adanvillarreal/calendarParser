@@ -21,6 +21,7 @@ USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
 
+FEED_EXPORT_ENCODING = 'utf-8'
 
 DUPEFILTER_DEBUG=True
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
