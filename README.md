@@ -8,7 +8,8 @@ To install the required modules, run the following lines in a terminal
 ```
 pip install --upgrade scrapy
 pip install --upgrade twisted
-pip install --upgrade pyopensslpip install --upgrade google-api-python-client
+pip install --upgrade pyopenssl
+pip install --upgrade google-api-python-client
 ```
 ### Usage
 Execute the file `calendarParser.py` with two arguments: email and password.
