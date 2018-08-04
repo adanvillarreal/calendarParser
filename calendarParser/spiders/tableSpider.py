@@ -10,7 +10,7 @@ from calendarParser.items import DayItem
 from calendarParser.items import ReminderItem
 import argparse
 
-semester_end_date = '20180518T235959Z'
+semester_end_date = '20181202sudo dnf system-upgrade --releasever=28 downloadT235959Z'
 
 class TableSpider(InitSpider):
     name = 'homepage'
@@ -59,7 +59,7 @@ class TableSpider(InitSpider):
             horarios = response.xpath('//*[@id="detalles"]/table[%d]/tr' % (i+2))
             j = 2
             while j <= len(horarios):
-                semester_start_date = datetime.date(2018, 1, 7)
+                semester_start_date = datetime.date(2018, 8, 6)
                 dias = response.xpath('//*[@id="detalles"]/table[%d]/tr[%d]/td[2]/font/text()' % ((i+2), j)).extract()
                 inicio = response.xpath('//*[@id="detalles"]/table[%d]/tr[%d]/td[3]/font/text()' % ((i+2), j)).extract()[0][:5]
                 final = response.xpath('//*[@id="detalles"]/table[%d]/tr[%d]/td[3]/font/text()' % ((i+2), j)).extract()[0][-10:-5]
